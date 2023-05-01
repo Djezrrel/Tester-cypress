@@ -1,0 +1,15 @@
+{
+  "name": "tester-cypress",
+  "version": "1.0.0",
+  "description": "Aprendizado cypress\r Estudo para QA software enginer",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^12.11.0"
+  }
+}
