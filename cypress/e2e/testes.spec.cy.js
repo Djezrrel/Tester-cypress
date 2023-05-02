@@ -83,16 +83,41 @@ describe('Central de Atendimento ao Cliente TAT', function() {
       cy.get('.success').should('be.visible') //verifica se apareceu a mensagem de sucesso
   })
 
+  //contains
   it('botao de enviar',function(){
       cy.contains('button','Enviar').click() //quer encontra um elemento que e um botao que tem um texto 'Enviar'
   })
 
+  //select => pode seleciona pelo texto,valor,indice
+//   it.only('botao de selecionar',function(){
+//     cy.get('#product').select('Youtube').should('have.value','Youtube') //por texto
+//     cy.get('#product').select('mentoria').should('have.value','mentoria') //value
+//     cy.get('#product').select(1).should('have.value','blog') //indice
+
+//   })
 
 
+  //inputs do tipo radios
+  it('valores do tipo radios/checkbox',function(){
+    cy.Radios()
+  })
 
-})
+  //.each => itera sobre uma lista (estrutura de array) cada um dos elementos
+  //wrap => empacota alguma coisa para ultiliza mais para frente
+  it.only('marca cada tipo de elemento',function() {
+    cy.get('input[type="radio"]') //pega todos os radios
+    .should('have.length',3) //comprimento
+    .each(function($radio){  //pega cada um dos elementos radios.. each recebe uma funcao de callbeck que recebe como argumento cada um dos elementos que foi selecionado
+        cy.wrap($radio).check()   //vai empacotar cada um desses radios e marca-los
+        cy.wrap($radio).should('be.checked') //vai verifica se foi chequado(marcado)
+    })
+   
+ })
 
-
-
+      
+    
+ })
+    
+    
 
 
