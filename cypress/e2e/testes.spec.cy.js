@@ -1,12 +1,14 @@
  //estrutura basica
 /// <reference types="Cypress" />
 
+
+
 describe('Central de Atendimento ao Cliente TAT', function() {
 
   //antes de cada teste executa o comando que esta nesta funcao
   beforeEach(function() {
-      cy.visit('./src/index.html')
-  });
+     cy.visit('./src/index.html')
+       })
 
 
   it('verifica o título da aplicação', function() {
@@ -53,7 +55,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     cy.get('#firstName').type('nomeAleatorio')
     cy.get('#lastName').type('Filho')
     cy.get('#email').type('Rogerio@gmail.com')
-    cy.get('#phone-checkbox').click()
+    cy.get('#phone-checkbox').check() //.click()
     cy.get('#open-text-area').type('Texto') 
 
     cy.get('button[type="submit"]').click()
@@ -104,18 +106,75 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
   //.each => itera sobre uma lista (estrutura de array) cada um dos elementos
   //wrap => empacota alguma coisa para ultiliza mais para frente
-  it.only('marca cada tipo de elemento',function() {
+  it('marca cada tipo de elemento',function() {
     cy.get('input[type="radio"]') //pega todos os radios
     .should('have.length',3) //comprimento
     .each(function($radio){  //pega cada um dos elementos radios.. each recebe uma funcao de callbeck que recebe como argumento cada um dos elementos que foi selecionado
         cy.wrap($radio).check()   //vai empacotar cada um desses radios e marca-los
         cy.wrap($radio).should('be.checked') //vai verifica se foi chequado(marcado)
     })
-   
+
  })
 
-      
-    
+ //marca e desmarca checkbox .check() do Cypress é usado para marcar uma caixa de seleção ou botão de opção 
+      it('marca ambos checkbox e desmarca',function(){
+        cy.get('input[type="checkbox"]').check().should('be.checked') //ve se ambos estao marcados
+        .last() //marca o ultimo
+        .uncheck() //desmarca
+        .should('not.be.checked') //verifica se nao esta checado
+      })
+
+
+     //selecionando arquivos com cypress 
+     it('selecionando arquivos da pasta',function(){
+
+        cy.get('input[type="file"]#file-upload') //input do tipo file que tem o ID->file-upload
+        .should('not.have.value') //nao tem nenhum valor
+        .selectFile('./cypress/support/e2e.js') //seleciona o arquivo
+        .should(function($input){
+           expect($input[0].files[0].name).to.equal('e2e.js')
+
+            //pego o input do tipo FILE,Verificou se tem algum valor,selecionou um arquivo com caminho,ve se o  1 input que retornou que o objeto files dele pega o 1 e verifica se o nome e igual ao arquivo
+        })
+     })
+
+
+     it('seleciona um arquivo ex: drag and drop',function(){
+        cy.get('input[type="file"]#file-upload') 
+        .should('not.have.value') 
+        .selectFile('./cypress/support/e2e.js',{action:'drag-drop'}) 
+        .should(function($input){
+            expect($input[0].files[0].name).to.equal('e2e.js')
+        //continua tudo igual,oque muda é o drag-drop => simulação do tipo de arastar o arquivo no seletor
+        })
+        
+     })
+
+
+    //  it('seleciona um arquivo cuja a fixture foi dada',function(){
+    //     cy.fixture('commands.js').as('ArquivoExemplo') //pega a fixture e põe como => arquivoExemplo || não precisa do caminho completo
+    //     cy.get('input[type="file"]')
+    //     .selectFile('@ArquivoExemplo')
+    //     .should(function($input){
+    //         expect($input[0].files[0].name).to.equal('@ArquivoExemplo')
+    //     })
+    //  })
+
+
+     //Links
+     it('abre em outra aba sem necessidade de click',function(){
+        //pega a div e pega o elemento que contem o 'a'
+        cy.get('#privacy a').should('have.attr','target','_blank') //ve se tem o atributo 'target' com valor '_blank'
+
+     })
+
+    it('entra no link',function(){
+        //nao entra em outra pagina,a pagina abre na mesma..Da para fazer verificação
+        cy.get('#privacy a')
+        .invoke('removeAttr','target') //remove o atributo do tipo 'target'
+        .click()
+        cy.contains('Talking About Testing').should('be.visible') //verifica se o testo esta visivel
+    })
  })
     
     
